@@ -1,0 +1,18 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "tree_api",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env PGUSER=postgres PGPASSWORD=example PGHOST=bonsaibook_db_1 PGPORT=5432 PGDATABASE=tree node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^7.4.3"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0"
+  }
+}
