@@ -4,7 +4,7 @@
   "description": "tree_api",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env PGUSER=postgres PGPASSWORD=example PGHOST=bonsaibook_db_1 PGPORT=5432 PGDATABASE=tree node index.js",
+    "start": "cross-env PGUSER=postgres PGPASSWORD=example PGHOST=localhost PGPORT=5432 PGDATABASE=tree nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
