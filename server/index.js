@@ -1,12 +1,9 @@
-const { Client } = require('pg');
+const express = require('express');
+const mountRoutes = require('./routes');
 
-async function main() {
-	const client = new Client();
-	await client.connect();
-	const res = await client.query('SELECT $1::text as message', ['Hello world!']);
-	console.log(res.rows[0].message);
-	await client.end();
-}
+const app = express();
+mountRoutes(app);
 
-main();
-
+app.listen(3100, () => {
+	console.log('listening on 3100');
+});
