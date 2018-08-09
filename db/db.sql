@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS tree_type CASCADE;
 DROP TABLE IF EXISTS tree_species CASCADE;
 DROP TABLE IF EXISTS tree_genus CASCADE;
 DROP TABLE IF EXISTS tree_family CASCADE;
+DROP VIEW IF EXISTS tree_view CASCADE;
 
 CREATE TABLE tree_family (
 	id SERIAL PRIMARY KEY,
@@ -32,7 +33,8 @@ CREATE TABLE tree_type (
 	id SERIAL PRIMARY KEY,
 	tree_family_id SERIAL REFERENCES tree_family(id) NOT NULL,
 	tree_genus_id SERIAL REFERENCES tree_genus(id) NOT NULL,
-	tree_species_id SERIAL REFERENCES tree_species(id) NOT NULL
+	tree_species_id SERIAL REFERENCES tree_species(id) NOT NULL,
+	UNIQUE(tree_family_id, tree_genus_id, tree_species_id)
 );
 
 CREATE TABLE acquisition_type (
@@ -41,19 +43,20 @@ CREATE TABLE acquisition_type (
 	UNIQUE(name)
 );
 
+CREATE TABLE tree (
+	id SERIAL PRIMARY KEY,
+	tree_type_id SERIAL REFERENCES tree_type(id) NOT NULL
+);
+
 CREATE TABLE acquisition (
 	id SERIAL PRIMARY KEY,
+	tree_id SERIAL REFERENCES tree(id) NOT NULL,
 	acquisition_type_id SERIAL REFERENCES acquisition_type(id) NOT NULL,
 	date DATE NOT NULL DEFAULT CURRENT_DATE,
 	age INTEGER,
 	location TEXT,
-	comment TEXT
-);
-
-CREATE TABLE tree (
-	id SERIAL PRIMARY KEY,
-	acquisition_id SERIAL REFERENCES acquisition(id) NOT NULL,
-	tree_type_id SERIAL REFERENCES tree_type(id) NOT NULL
+	comment TEXT,
+	UNIQUE(tree_id)
 );
 
 CREATE TABLE maintenance_type (
@@ -78,17 +81,34 @@ CREATE TABLE photo (
 	comment TEXT
 );
 
-CREATE VIEW tree_view as
-	SELECT tree.id AS id,
+CREATE VIEW maintenance_view AS
+	SELECT 
+		maintenance.id,
+		maintenance.tree_id,
+		maintenance_type.id AS maintenance_type_id,
+		maintenance_type.name AS maintenance_type_name,
+		maintenance.date,
+		maintenance.comment
+	FROM maintenance
+	INNER JOIN maintenance_type ON maintenance.maintenance_type_id = maintenance_type.id;
+
+CREATE VIEW tree_view As
+	SELECT
+		tree.id AS id,
+		tree_type.id AS tree_type_id,
+		tree_family.id AS family_id,
 		tree_family.name AS family,
+		tree_genus.id AS genus_id,
 		tree_genus.name AS genus,
+		tree_species.id AS species_id,
 		tree_species.name AS species,
+		acquisition.id AS acquisition_id,
 		acquisition.date AS acquisition_date,
 		acquisition.age AS acquisition_age,
 		acquisition.location AS acquisition_location,
 		acquisition_type.name AS acquisition_type,
-		acquisition.comment AS acquisition_comment FROM tree
-	INNER JOIN acquisition ON tree.acquisition_id = acquisition.id
+		acquisition.comment AS acquisition_comment FROM acquisition
+	INNER JOIN tree ON acquisition.tree_id = tree.id
 	INNER JOIN acquisition_type ON acquisition.acquisition_type_id = acquisition_type.id
 	INNER JOIN tree_type ON tree.tree_type_id = tree_type.id
 	INNER JOIN tree_family ON tree_type.tree_family_id = tree_family.id
