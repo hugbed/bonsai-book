@@ -1,4 +1,28 @@
 const Router = require('express-promise-router')
+const multer  = require('multer');
+
+const dateToString = (date) => {
+	let dateStr = `${date.getFullYear()}-`;
+	dateStr += `${date.getMonth()}-`;
+	dateStr += `${date.getDate()}.`;
+	dateStr += `${date.getHours()}.`;
+	dateStr += `${date.getMinutes()}.`;
+	dateStr += `${date.getSeconds()}.`;
+	dateStr += `${date.getMilliseconds()}`;
+	return dateStr;
+};
+
+let storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+	cb(null, 'public/img');
+  },
+  filename: (req, file, cb) => {
+	const filename = file.originalname;
+	const date = new Date(Date.now());
+	cb(null, filename.split('.').slice(0, -1).join('.') + '.' + dateToString(date) + '.jpg');
+  }
+});
+const upload = multer({ storage });
 
 const treeDB = require('../db/Tree')
 
@@ -42,7 +66,7 @@ router.post('/tree', async (req, res) => {
 	  acquisitionComment : req.body.acquisition_comment
 	};
 	await treeDB.addTree(tree);
-	res.send({ success: true});
+	res.sendStatus(200);
 });
 
 router.get('/families', async (req, res) => {
@@ -77,11 +101,10 @@ router.post('/tree/maintenance', async (req, res) => {
 		date : req.body.date,
 		comment : req.body.comment,
 	  };
-	await treeDB.addMaintenance(maintenance);
+	const id = await treeDB.addMaintenance(maintenance);
+	res.send(JSON.stringify({ maintenance_id: id }))
 	res.sendStatus(200);
 });
-
-// post maintenance (will add maintenace_type if necessary)
 
 router.get('/maintenance/types', async (req, res) => {
 	res.send(await treeDB.fetchMaintenanceTypes());
@@ -114,5 +137,13 @@ router.post('/tree/photo', async (req, res) => {
 	res.sendStatus(200);
 });
 
+router.get('/tree/photo/file/:filename', async (req, res) => {
+	const filename = __dirname + '/../public/img/' + req.params["filename"];
+	res.download(filename);
+});
 
-
+router.post('/tree/photo/file', upload.single('file'), function (req, res, next) {
+	const filename = req.file.filename;
+	console.log('Uploaded image: ' + filename);
+	res.send(JSON.stringify({ filename: filename }));
+});
