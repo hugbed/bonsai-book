@@ -50,16 +50,39 @@ class Tree {
   		return await db.fetchAllRows('maintenance_view');
 	}
 
+	static async fetchMaintenanceForTree(id) {
+		return await db.fetchAllQueryRows('SELECT * from maintenance_view WHERE tree_id = $1', [id]);
+  	}
+
+	static async addMaintenance(maintenance) {
+		const maintenanceTypeId = await this._addName('maintenance_type', maintenance.type);
+		let queryStr = 'INSERT INTO maintenance (id, tree_id, maintenance_type_id, date, comment) ';
+		queryStr    += 'VALUES (DEFAULT, $1, $2, $3, $4) RETURNING id';
+		const { id } = await db.fetchFirstQueryRow(
+			queryStr, [maintenance.treeId, maintenanceTypeId, maintenance.date, maintenance.comment]
+		);
+		return id;
+	}
+
 	static async fetchPhotos() {
   		return await db.fetchAllRows('photo');
 	}
 
-	static async fetchPhotosForTree(treeId) {
-		return await db.fetchAllQueryRows('SELECT * FROM photo WHERE tree_id = $1', [treeId]);;
+	static async fetchPhotosForTree(id) {
+		return await db.fetchAllQueryRows('SELECT * FROM photo WHERE tree_id = $1', [id]);;
 	}
 
 	static async fetchPhotosForTreeDate(treeId, date) {
 		return await db.fetchAllQueryRows('SELECT * FROM photo WHERE tree_id = $1 AND date = ', [treeId, date]);;
+	}
+
+	static async addPhotoForTree(photo) {
+		let queryStr = 'INSERT INTO photo (id, tree_id, date, filepath, comment) ';
+		queryStr    += 'VALUES (DEFAULT, $1, $2, $3, $4) RETURNING id';
+		const { id } = await db.fetchFirstQueryRow(
+			queryStr, [photo.treeId, photo.date, photo.filepath, photo.comment]
+		);
+		return id;
 	}
 
 	static async _fetchName(table, name) {
@@ -74,7 +97,6 @@ class Tree {
  			return id;
 		} catch (e) {
 			console.log('Already exists ' + table + ' ' + name);
-			// console.log(e);
 			// it already exists, fetch its id
 			const res = await this._fetchName(table, name);
 			// console.log(res);

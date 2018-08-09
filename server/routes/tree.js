@@ -31,7 +31,7 @@ router.get('/tree/:id', async (req, res) => {
 });
 
 router.post('/tree', async (req, res) => {
-	const treei = {
+	const tree = {
 	  family : req.body.family,
 	  genus : req.body.genus,
 	  species : req.body.species,
@@ -41,11 +41,9 @@ router.post('/tree', async (req, res) => {
 	  acquisitionType : req.body.acquisition_type,
 	  acquisitionComment : req.body.acquisition_comment
 	};
-	await treeDB.addTree(treei);
+	await treeDB.addTree(tree);
 	res.send({ success: true});
 });
-
-// post a new tree (will add familiy, genus, etc. if necessary)
 
 router.get('/families', async (req, res) => {
 	res.send(await treeDB.fetchFamilies());
@@ -67,6 +65,22 @@ router.get('/maintenance', async (req, res) => {
 	res.send(await treeDB.fetchMaintenance());
 });
 
+router.get('/tree/maintenance/:tree_id', async (req, res) => {
+	const id = req.params["tree_id"];
+	res.send(await treeDB.fetchMaintenanceForTree(id));
+});
+
+router.post('/tree/maintenance', async (req, res) => {
+	const maintenance = {
+		treeId : req.body.tree_id,
+		type : req.body.type,
+		date : req.body.date,
+		comment : req.body.comment,
+	  };
+	await treeDB.addMaintenance(maintenance);
+	res.sendStatus(200);
+});
+
 // post maintenance (will add maintenace_type if necessary)
 
 router.get('/maintenance/types', async (req, res) => {
@@ -78,18 +92,27 @@ router.get('/photos', async (req, res) => {
 	res.send(await treeDB.fetchPhotos());
 });
 
-router.get('/photos/:tree_id', async (req, res) => {
+router.get('/tree/photos/:tree_id', async (req, res) => {
   	const treeId = req.params["tree_id"];
-	res.send(await treeDB.fetchPhotosForTree());
+	res.send(await treeDB.fetchPhotosForTree(treeId));
 });
 
-router.get('/photos/:tree_id/:date', async (req, res) => {
+router.get('/tree/photos/:tree_id/:date', async (req, res) => {
   	const treeId = req.params["tree_id"];
   	const date = req.params["date"];
 	res.send(await treeDB.fetchPhotosForTreeDate(treeId, date));
 });
 
-// post photo for tree, date (with filepath, comment)
+router.post('/tree/photo', async (req, res) => {
+	const photo = {
+		treeId : req.body.tree_id,
+		date : req.body.date,
+		filepath : req.body.filepath,
+		comment : req.body.comment,
+	  };
+	await treeDB.addPhotoForTree(photo);
+	res.sendStatus(200);
+});
 
 
 
