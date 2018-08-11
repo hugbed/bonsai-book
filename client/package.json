@@ -1,0 +1,29 @@
+{
+  "name": "admin-client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "history": "^4.7.2",
+    "prop-types": "^15.6.1",
+    "query-string": "^6.1.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-dropzone": "^4.2.9",
+    "react-markdown": "^3.3.2",
+    "react-scripts": "1.1.4",
+    "request": "^2.87.0",
+    "styled-components": "^3.3.0",
+    "universal-router": "^6.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "proxy": {
+    "/trees/*": {
+      "target": "http://localhost:3100"
+    }
+  }
+}
