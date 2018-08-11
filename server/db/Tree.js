@@ -73,7 +73,35 @@ class Tree {
 	}
 
 	static async fetchPhotosForTreeDate(treeId, date) {
-		return await db.fetchAllQueryRows('SELECT * FROM photo WHERE tree_id = $1 AND date = ', [treeId, date]);;
+		return await db.fetchAllQueryRows('SELECT * FROM photo WHERE tree_id = $1 AND date = $2', [treeId, date]);;
+	}
+
+	static async fetchTimelineTableIndices() {
+		return await db.fetchAllRows('timeline_table_index');
+	}
+
+	static async fetchTimeline(treeId, offset, numberOfItems) {
+		const tableIds = await this.fetchTimelineTableIndices();
+		let tableMapping = {};
+		tableIds.forEach((tableMappingRow) => tableMapping[tableMappingRow.id] = tableMappingRow);
+		
+		// // todo: LIMIT and OFFSET
+		const timelineIds = await db.fetchAllQueryRows('SELECT * FROM timeline_view WHERE tree_id = $1 OFFSET $2 LIMIT $3', [treeId, offset, numberOfItems]);
+
+		// instead we could offer a get timeline item route
+		let timeline = [];
+		for (const timelineRow of timelineIds) {
+			const tableMappingRow = tableMapping[timelineRow.table_index];
+			const id = timelineRow.id;
+			const item = await db.fetchById(tableMappingRow.table_name, id);
+
+			timeline.push({
+				type: tableMappingRow.item_type_name,
+				...item,
+			});
+		}
+
+		return timeline;
 	}
 
 	static async addPhotoForTree(photo) {

@@ -1,29 +1,6 @@
 const Router = require('express-promise-router')
-const multer  = require('multer');
 
-const dateToString = (date) => {
-	let dateStr = `${date.getFullYear()}-`;
-	dateStr += `${date.getMonth()}-`;
-	dateStr += `${date.getDate()}.`;
-	dateStr += `${date.getHours()}.`;
-	dateStr += `${date.getMinutes()}.`;
-	dateStr += `${date.getSeconds()}.`;
-	dateStr += `${date.getMilliseconds()}`;
-	return dateStr;
-};
-
-let storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-	cb(null, 'public/img');
-  },
-  filename: (req, file, cb) => {
-	const filename = file.originalname;
-	const date = new Date(Date.now());
-	cb(null, filename.split('.').slice(0, -1).join('.') + '.' + dateToString(date) + '.jpg');
-  }
-});
-const upload = multer({ storage });
-
+const upload = require('../upload');
 const treeDB = require('../db/Tree')
 
 // create a new express-promise-router
@@ -31,27 +8,13 @@ const treeDB = require('../db/Tree')
 // it allows you to use async functions as route handlers
 const router = new Router()
 
-// export our router to be mounted by the parent application
-module.exports = router;
-
 router.get('/', async (req, res) => {
-	const treei = {
-	  family : 'Family',
-	  genus : 'Genus',
-	  species : 'Species',
-	  acquisitionDate : '2018-01-01',
-	  acquisitionAge : 2,
-	  acquisitionLocation : 'Here',
-	  acquisitionType : 'Air Layering',
-	  acquisitionComment : 'Comment'
-	};
-	console.log(await treeDB.addTree(treei));
-	res.send(await treeDB.fetchAll());
+	res.send(JSON.stringify(await treeDB.fetchAll()));
 });
 
 router.get('/tree/:id', async (req, res) => {
 	const id = req.params["id"];
-	res.send(await treeDB.fetchById(id));
+	res.send(JSON.stringify(await treeDB.fetchById(id)));
 });
 
 router.post('/tree', async (req, res) => {
@@ -70,11 +33,11 @@ router.post('/tree', async (req, res) => {
 });
 
 router.get('/families', async (req, res) => {
-	res.send(await treeDB.fetchFamilies());
+	res.send(JSON.stringify(await treeDB.fetchFamilies()));
 });
 
 router.get('/genus', async (req, res) => {
-	res.send(await treeDB.fetchGenus());
+	res.send(JSON.stringify(await treeDB.fetchGenus()));
 });
 
 router.get('/species', async (req, res) => {
@@ -126,6 +89,16 @@ router.get('/tree/photos/:tree_id/:date', async (req, res) => {
 	res.send(await treeDB.fetchPhotosForTreeDate(treeId, date));
 });
 
+router.get('/tree/timeline/:tree_id', async (req, res) => {
+	const treeId = req.params["tree_id"];
+	const offset = req.params["offset"];
+	const numberOfItems = req.params["numberOfParams"];
+	console.log(offset);
+  	res.send(await treeDB.fetchTimeline(treeId, 1, 10));
+});
+
+// could get timeline item from type and id.
+
 router.post('/tree/photo', async (req, res) => {
 	const photo = {
 		treeId : req.body.tree_id,
@@ -147,3 +120,6 @@ router.post('/tree/photo/file', upload.single('file'), function (req, res, next)
 	console.log('Uploaded image: ' + filename);
 	res.send(JSON.stringify({ filename: filename }));
 });
+
+// export our router to be mounted by the parent application
+module.exports = router;

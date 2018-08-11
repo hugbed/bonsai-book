@@ -1,4 +1,5 @@
 BEGIN;
+DROP TABLE IF EXISTS note CASCADE;
 DROP TABLE IF EXISTS photo CASCADE;
 DROP TABLE IF EXISTS maintenance CASCADE;
 DROP TABLE IF EXISTS maintenance_type CASCADE;
@@ -9,7 +10,10 @@ DROP TABLE IF EXISTS tree_type CASCADE;
 DROP TABLE IF EXISTS tree_species CASCADE;
 DROP TABLE IF EXISTS tree_genus CASCADE;
 DROP TABLE IF EXISTS tree_family CASCADE;
+DROP TABLE IF EXISTS timeline_table_index CASCADE;
 DROP VIEW IF EXISTS tree_view CASCADE;
+DROP VIEW IF EXISTS timeline CASCADE;
+DROP VIEW IF EXISTS timeline_view CASCADE;
 
 CREATE TABLE tree_family (
 	id SERIAL PRIMARY KEY,
@@ -81,6 +85,13 @@ CREATE TABLE photo (
 	comment TEXT
 );
 
+CREATE TABLE note (
+	id SERIAL PRIMARY KEY,
+	tree_id SERIAL REFERENCES tree(id) NOT NULL,
+	date date NOT NULL DEFAULT CURRENT_DATE,
+	comment TEXT
+);
+
 CREATE VIEW maintenance_view AS
 	SELECT 
 		maintenance.id,
@@ -92,7 +103,7 @@ CREATE VIEW maintenance_view AS
 	FROM maintenance
 	INNER JOIN maintenance_type ON maintenance.maintenance_type_id = maintenance_type.id;
 
-CREATE VIEW tree_view As
+CREATE VIEW tree_view AS
 	SELECT
 		tree.id AS id,
 		tree_type.id AS tree_type_id,
@@ -114,6 +125,28 @@ CREATE VIEW tree_view As
 	INNER JOIN tree_family ON tree_type.tree_family_id = tree_family.id
 	INNER JOIN tree_genus ON tree_type.tree_genus_id = tree_genus.id
 	INNER JOIN tree_species ON tree_type.tree_species_id = tree_species.id;
+
+CREATE TABLE timeline_table_index (
+	id SERIAL PRIMARY KEY,
+	item_type_name TEXT NOT NULL,
+	table_name TEXT NOT NULL,
+	UNIQUE(table_name)
+);
+
+INSERT INTO timeline_table_index (id, item_type_name, table_name) VALUES (0, 'acquisition', 'acquisition');
+INSERT INTO timeline_table_index (id, item_type_name, table_name) VALUES (1, 'maintenance', 'maintenance_view');
+INSERT INTO timeline_table_index (id, item_type_name, table_name) VALUES (2, 'photo', 'photo');
+INSERT INTO timeline_table_index (id, item_type_name, table_name) VALUES (3, 'note', 'note');
+
+CREATE VIEW timeline_view AS
+	SELECT date, id, tree_id, 0 AS table_index FROM acquisition
+	UNION ALL
+	SELECT date, id, tree_id, 1 AS table_index FROM maintenance
+	UNION ALL
+	SELECT date, id, tree_id, 2 AS table_index FROM photo
+	UNION ALL
+	SELECT date, id, tree_id, 2 AS table_index FROM note	
+	ORDER BY date DESC;
 
 -- could also provide an on "insert do instead" to view.
 
