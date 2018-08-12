@@ -91,10 +91,9 @@ router.get('/tree/photos/:tree_id/:date', async (req, res) => {
 
 router.get('/tree/timeline/:tree_id', async (req, res) => {
 	const treeId = req.params["tree_id"];
-	const offset = req.params["offset"];
-	const numberOfItems = req.params["numberOfParams"];
-	console.log(offset);
-  	res.send(await treeDB.fetchTimeline(treeId, 1, 10));
+	const offset = req.query["offset"];
+	const numberOfItems = req.query["numberOfItems"];
+  	res.send(await treeDB.fetchTimeline(treeId, offset, numberOfItems));
 });
 
 // could get timeline item from type and id.
