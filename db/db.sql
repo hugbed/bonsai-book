@@ -145,7 +145,7 @@ CREATE VIEW timeline_view AS
 	UNION ALL
 	SELECT date, id, tree_id, 2 AS table_index FROM photo
 	UNION ALL
-	SELECT date, id, tree_id, 2 AS table_index FROM note	
+	SELECT date, id, tree_id, 3 AS table_index FROM note
 	ORDER BY date DESC;
 
 -- could also provide an on "insert do instead" to view.

@@ -84,7 +84,7 @@ class Tree {
 		const tableIds = await this.fetchTimelineTableIndices();
 		let tableMapping = {};
 		tableIds.forEach((tableMappingRow) => tableMapping[tableMappingRow.id] = tableMappingRow);
-		
+
 		// // todo: LIMIT and OFFSET
 		const timelineIds = await db.fetchAllQueryRows('SELECT * FROM timeline_view WHERE tree_id = $1 OFFSET $2 LIMIT $3', [treeId, offset, numberOfItems]);
 
@@ -109,6 +109,15 @@ class Tree {
 		queryStr    += 'VALUES (DEFAULT, $1, $2, $3, $4) RETURNING id';
 		const { id } = await db.fetchFirstQueryRow(
 			queryStr, [photo.treeId, photo.date, photo.filepath, photo.comment]
+		);
+		return id;
+	}
+
+	static async addNoteForTree(photo) {
+		let queryStr = 'INSERT INTO note (id, tree_id, date, comment) ';
+		queryStr    += 'VALUES (DEFAULT, $1, $2, $3) RETURNING id';
+		const { id } = await db.fetchFirstQueryRow(
+			queryStr, [photo.treeId, photo.date, photo.comment]
 		);
 		return id;
 	}

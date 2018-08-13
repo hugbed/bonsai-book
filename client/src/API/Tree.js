@@ -1,26 +1,23 @@
+import Fetch from './Fetch';
+
 class TreeAPI {
     static async fetchAll() {
-        return await fetch('/trees', {
-          method: 'GET',
-        }).then(response => response.json())
-          .catch(err => console.log(err))
-          .then(jsonData => jsonData);
+      return await Fetch.get('/trees');
     }
 
     static async findById(id) {
-        return await fetch(`/trees/tree/${id}`, {
-          method: 'GET',
-        }).then(response => response.json())
-          .catch(err => console.log(err))
-          .then(jsonData => jsonData);
+      return await Fetch.get(`/trees/tree/${id}`);
     }
 
     static async fetchTimelineForTree(treeId, offset, numberOfItems) {
-      return await fetch(`/trees/tree/timeline/${treeId}?offset=${offset}&numberOfItems=${numberOfItems}`, {
-        method: 'GET',
-      }).then(response => response.json())
-        .catch(err => console.log(err))
-        .then(jsonData => jsonData);
+      return await Fetch.get(`/trees/tree/timeline/${treeId}?offset=${offset}&numberOfItems=${numberOfItems}`);
+    }
+
+    static async addNoteForTree(treeId, comment) {
+      return await Fetch.post(`/trees/tree/note`, {
+        tree_id: treeId,
+        comment: comment
+      });
     }
 }
 

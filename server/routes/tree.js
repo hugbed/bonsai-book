@@ -96,7 +96,15 @@ router.get('/tree/timeline/:tree_id', async (req, res) => {
   	res.send(await treeDB.fetchTimeline(treeId, offset, numberOfItems));
 });
 
-// could get timeline item from type and id.
+router.post('/tree/note', async (req, res) => {
+	const note = {
+		treeId : req.body.tree_id,
+		date : new Date(Date.now()),
+		comment : req.body.comment
+	};
+	await treeDB.addNoteForTree(note);
+	res.sendStatus(200);
+});
 
 router.post('/tree/photo', async (req, res) => {
 	const photo = {
