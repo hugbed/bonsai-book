@@ -9,13 +9,12 @@ import AddNoteItem from './AddNoteItem';
 
 import styled from 'styled-components';
 
-const options = [ "note", "maintenance", "acquisition", "photo" ];
+const options = [ "note", "maintenance", "photo" ];
 
 const optionComponents = {
+    "note": (tree) => <AddNoteItem tree={tree} />,
     "maintenance": (tree) => <AddMaintenanceItem tree={tree} />,
-    "acquisition": (tree) => <AddAcquisitionItem tree={tree} />,
-    "photo": (tree) => <AddPhotoItem tree={tree}/>,
-    "note": (tree) => <AddNoteItem tree={tree} />
+    "photo": (tree) => <AddPhotoItem tree={tree}/>
 };
 
 class AddItemMenu extends Component {
@@ -40,10 +39,10 @@ class AddItemMenu extends Component {
     render() {
         return (
             <div>
-                <div>
-                    Post an event
+                <label>
+                    <InputLabel>Post an event</InputLabel>
                     <Select values={options} onChange={(option) => this.onOptionChange(option)} />
-                </div>
+                </label>
                 <OptionComponentContainer>
                     { optionComponents[this.state.option](this.props.tree) }
                 </OptionComponentContainer>
@@ -52,9 +51,13 @@ class AddItemMenu extends Component {
     }
 }
 
+const InputLabel = styled.div`
+    display: inline-block;
+    margin-right: 10px;
+`
+
 const OptionComponentContainer = styled.div`
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 25px;
 `;
 
 export default AddItemMenu;

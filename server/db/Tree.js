@@ -159,6 +159,10 @@ class Tree {
 		return await this._addName('acquisition_type', name);
 	}
 
+	static async fetchAcquisitionTypes() {
+		return await db.fetchAllQueryRows('SELECT * FROM acquisition_type');
+	}
+
 	static async addAcquisition(acquisition) {
 		const typeId = await this.addAcquisitionType(acquisition.type);
 

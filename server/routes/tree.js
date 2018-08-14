@@ -73,6 +73,10 @@ router.get('/maintenance/types', async (req, res) => {
 	res.send(await treeDB.fetchMaintenanceTypes());
 });
 
+router.get('/acquisition/types', async (req, res) => {
+	res.send(await treeDB.fetchAcquisitionTypes());
+});
+
 // should be able to fetch photos for a tree, a (tree, date)
 router.get('/photos', async (req, res) => {
 	res.send(await treeDB.fetchPhotos());

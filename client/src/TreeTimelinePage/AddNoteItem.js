@@ -1,18 +1,32 @@
 import React, { Component } from 'react';
 
 import TextArea from '../TextArea';
+import DatePicker from '../DatePicker';
+
+import Checkbox from '../Checkbox';
 import TreeAPI from '../API/Tree';
+
+import styled from 'styled-components';
 
 class AddNoteItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            note: ""
+            note: "",
+            date: ""
         };
     }
 
-    onChange(note) {
+    onDateChange(date) {
         this.setState({
+            ...this.state,
+            date: date
+        });
+    }
+
+    onNoteChange(note) {
+        this.setState({
+            ...this.state,
             note: note
         });
     }
@@ -21,11 +35,18 @@ class AddNoteItem extends Component {
         TreeAPI.addNoteForTree(this.props.tree.id, this.state.note);
         event.preventDefault();
     }
-    
+
     render() {
         return (
             <form onSubmit={(event) => this.onSubmit(event)}>
-                <TextArea style={{width: '100%'}} name="comment" cols="40" rows="5" onChange={(note) => this.onChange(note)}></TextArea>
+                {/* <DatePicker onChange={((date) => this.onDateChange(date))} /> */}
+                <TextArea
+                    style={{width: '100%'}}
+                    placeholder="Comment..."
+                    name="comment"
+                    cols="40"
+                    rows="5"
+                    onChange={(note) => this.onNoteChange(note)}></TextArea>
                 <input type="submit" />
             </form>
         );

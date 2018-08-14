@@ -19,6 +19,18 @@ class TreeAPI {
         comment: comment
       });
     }
+
+    static async fetchAcquisitionTypes() {
+      return await Fetch.get('/trees/acquisition/types');
+    }
+
+    // todo: should use add tree to add acquisition instead
+    static async addAcquisitionForTree(treeId, acquisition) {
+      return await Fetch.post(`/trees/tree/acquisition`, {
+        tree_id: treeId,
+        acquisition: acquisition
+      });
+    }
 }
 
 export default TreeAPI;
