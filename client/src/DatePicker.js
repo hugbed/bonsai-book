@@ -15,6 +15,7 @@ class DatePicker extends Component {
 
     onChange(event) {
         this.setState({date: event.target.value});
+        this.props.onChange(event.target.value);
     }
 
     todayDate() {

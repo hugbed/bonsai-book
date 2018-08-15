@@ -94,12 +94,13 @@ class TimelineItemMaintenance extends Component {
 class TimelineItemPhoto extends Component {
   render() {
     const item = this.props.item;
+    const filepath = item.filepath !== undefined ? item.filepath : "";
     return (
       <TimelineItem>
         <img
           alt={item.filepath}
           style={{width: '100%'}}
-          src={`/trees/tree/photo/file/${item.filepath}`} />
+          src={`/trees/tree/photo/file/${filepath}`} />
         <Comment> { item.comment } </Comment>
         <DateFooter>
           { dateToAgo(new Date(item.date)) } ({ dateToString(new Date(item.date)) })
@@ -130,6 +131,7 @@ const CardTitle = FormLabel.extend`
 
 const Comment = styled.div`
   margin-top: 10px;
+  margin-bottom: 10px;
   padding-left: 10px;
 `;
 

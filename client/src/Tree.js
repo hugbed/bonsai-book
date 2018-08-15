@@ -41,14 +41,27 @@ class Tree extends Component {
     }
 
     fetchLastPhotoOfTree() {
-      TreeAPI.fetchLastPhotoOfTree(this.props.tree.id)
-        .then((photo) => console.log(this.setState({...this.state, photo: photo})));
+      if (this.props.tree.id !== undefined) {
+        TreeAPI.fetchLastPhotoOfTree(this.props.tree.id)
+          .then((photo) => console.log(this.setState({...this.state, photo: photo})));
+      }
+    }
+
+    renderImg() {
+      let img = <img/>;
+      if (this.state.photo !== undefined && this.state.photo.filepath !== undefined) {
+        img = <img
+                style={{width: '200px'}}
+                width="200px"
+                alt={this.state.photo.filepath}
+                src={`/trees/tree/photo/file/${this.state.photo.filepath}`}/>;
+      }
+      return img;
     }
 
     render() {
       const tree = this.props.tree;
       const dateStr = dateToString(new Date(tree.acquisition_date));
-      const filepath = this.state.photo ? this.state.photo.filepath : "";
 
       return (
         <Card>
@@ -64,12 +77,7 @@ class Tree extends Component {
               <Field name="Location" value={tree.acquisition_location}></Field>
               {/* <Field name="" value={comment}></Field> */}
             </div>
-            {/* {this.renderThumbnail()} */}
-            <img
-              style={{width: '200px'}}
-              width="200px"
-              alt={filepath}
-              src={`/trees/tree/photo/file/${filepath}`} />
+            { this.renderImg() }
           </HorizontalSpaced>
         </Card>
       )

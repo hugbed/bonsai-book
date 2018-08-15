@@ -122,7 +122,10 @@ router.post('/tree/photo', async (req, res) => {
 		filepath : req.body.filepath,
 		comment : req.body.comment
 	};
+	console.log("Adding photo: ");
+	console.log(photo);
 	const id = await treeDB.addPhotoForTree(photo);
+	console.log(id);
 	res.send(JSON.stringify({ id: id }));
 });
 
