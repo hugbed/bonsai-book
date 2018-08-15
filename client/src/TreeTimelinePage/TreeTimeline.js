@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Tree from '../Tree';
 import AddItemMenu from './AddItemMenu';
 import Card from '../Card';
-import { dateToString } from '../DateUtils';
+import { dateToString, dateToAgo } from '../DateUtils';
 import { FormLabel, FormRow } from '../Form';
 import styled from 'styled-components';
 
@@ -63,7 +63,7 @@ class TimelineItemAcquisition extends Component {
         </CardTitle>
         <Comment> { item.comment } </Comment>
         <DateFooter>
-          { dateToString(new Date(item.date)) }
+          { dateToAgo(new Date(item.date)) } ({ dateToString(new Date(item.date)) })
         </DateFooter>
       </TimelineItem>
     );
@@ -80,7 +80,7 @@ class TimelineItemMaintenance extends Component {
         </CardTitle>
         <Comment> { item.comment } </Comment>
         <DateFooter>
-          { dateToString(new Date(item.date)) }
+          { dateToAgo(new Date(item.date)) } ({ dateToString(new Date(item.date)) })
         </DateFooter>
       </TimelineItem>
     );
@@ -97,7 +97,9 @@ class TimelineItemPhoto extends Component {
           style={{width: '100%'}}
           src={`/trees/tree/photo/file/${item.filepath}`} />
         <Comment> { item.comment } </Comment>
-        <DateFooter> { dateToString(new Date(item.date)) } </DateFooter>
+        <DateFooter>
+          { dateToAgo(new Date(item.date)) } ({ dateToString(new Date(item.date)) })
+        </DateFooter>
       </TimelineItem>
     );
   }
