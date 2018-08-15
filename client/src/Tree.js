@@ -6,8 +6,16 @@ import { Horizontal, HorizontalSpaced } from './Horizontal';
 import { EditButton, TrashButton } from './IconButton';
 import { dateToString } from './DateUtils';
 import styled from 'styled-components';
+import TreeAPI from './API/Tree';
 
 class Tree extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        photo: {}
+      };
+    }
+
     renderEditBar() {
         if (this.props.editable === false) {
             return "";
@@ -20,10 +28,27 @@ class Tree extends Component {
         );
     }
 
+    componentDidMount(prevProps) {
+      if (this.props.tree !== undefined) {
+        this.fetchLastPhotoOfTree();
+      }
+    }
+
+    componentDidUpdate(prevProps) {
+      if (this.props.tree !== undefined && this.props.tree.id !== prevProps.tree.id) {
+        this.fetchLastPhotoOfTree();
+      }
+    }
+
+    fetchLastPhotoOfTree() {
+      TreeAPI.fetchLastPhotoOfTree(this.props.tree.id)
+        .then((photo) => console.log(this.setState({...this.state, photo: photo})));
+    }
+
     render() {
       const tree = this.props.tree;
       const dateStr = dateToString(new Date(tree.acquisition_date));
-    //   const comment = tree.acquisition_comment ? `(${tree.acquisition_comment})` : "";
+      const filepath = this.state.photo ? this.state.photo.filepath : "";
 
       return (
         <Card>
@@ -40,6 +65,11 @@ class Tree extends Component {
               {/* <Field name="" value={comment}></Field> */}
             </div>
             {/* {this.renderThumbnail()} */}
+            <img
+              style={{width: '200px'}}
+              width="200px"
+              alt={filepath}
+              src={`/trees/tree/photo/file/${filepath}`} />
           </HorizontalSpaced>
         </Card>
       )

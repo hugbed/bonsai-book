@@ -72,6 +72,10 @@ class Tree {
 		return await db.fetchAllQueryRows('SELECT * FROM photo WHERE tree_id = $1', [id]);;
 	}
 
+	static async fetchLastPhotoForTree(id) {
+		return await db.fetchFirstQueryRow('SELECT * FROM photo WHERE tree_id = $1 ORDER BY date DESC', [id]);
+	}
+
 	static async fetchPhotosForTreeDate(treeId, date) {
 		return await db.fetchAllQueryRows('SELECT * FROM photo WHERE tree_id = $1 AND date = $2', [treeId, date]);;
 	}

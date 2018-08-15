@@ -9,6 +9,11 @@ import styled from 'styled-components';
 
 class TreeList extends Component {
   render() {
+    let treeComponents = (<div></div>);
+    if (this.props.trees.length > 0) {
+      treeComponents = this.props.trees.map((tree, i) =>
+        <Tree key={tree.id} tree={tree}/>);
+    }
     return (
       <div>
         <details>
@@ -18,9 +23,8 @@ class TreeList extends Component {
             </div>
         </details>
         <div>
-        { this.props.trees.map((tree, i) =>
-            <Tree key={tree.id} tree={tree}/>) }
-            </div>
+          { treeComponents }
+        </div>
       </div>
     );
   }

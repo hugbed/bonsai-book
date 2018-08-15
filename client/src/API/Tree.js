@@ -40,6 +40,10 @@ class TreeAPI {
       return await Fetch.get('/trees/maintenance/types');
     }
 
+    static async fetchLastPhotoOfTree(treeId) {
+      return await Fetch.get(`/trees/tree/photos/last/${treeId}`);
+    }
+
     // todo: should use add tree to add acquisition instead
     static async addTree(tree) {
       return await Fetch.post(`/trees/tree`, {

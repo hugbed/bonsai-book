@@ -87,6 +87,11 @@ router.get('/tree/photos/:tree_id', async (req, res) => {
 	res.send(await treeDB.fetchPhotosForTree(treeId));
 });
 
+router.get('/tree/photos/last/:tree_id', async (req, res) => {
+	const treeId = req.params["tree_id"];
+	res.send(JSON.stringify(await treeDB.fetchLastPhotoForTree(treeId)));
+});
+
 router.get('/tree/photos/:tree_id/:date', async (req, res) => {
   	const treeId = req.params["tree_id"];
   	const date = req.params["date"];

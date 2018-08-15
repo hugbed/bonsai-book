@@ -149,7 +149,7 @@ class AddTree extends Component {
         });
     }
 
-    onSubmit(event) {
+    async onSubmit(event) {
         event.preventDefault();
         const tree = {
             family: this.state.type.family,
@@ -161,7 +161,7 @@ class AddTree extends Component {
             acquisition_type: this.state.acquisition.type,
             acquisition_comment: this.state.acquisition.note
         };
-        TreeAPI.addTree(tree);
+        await TreeAPI.addTree(tree);
         window.location.reload(false);
     }
 

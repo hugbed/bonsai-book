@@ -15,13 +15,13 @@ class TreeTimelinePage extends Component {
     };
   }
 
-  componentWillMount() {
+  async componentDidMount() {
     const id = QueryString.parse(window.location.search).id;
-    TreeAPI.findById(id)
+    await TreeAPI.findById(id)
       .then(tree => {
         this.setState({ ...this.state, tree: tree });
       });
-    TreeAPI.fetchTimelineForTree(id, this.state.offset, this.state.numberOfItems)
+    await TreeAPI.fetchTimelineForTree(id, this.state.offset, this.state.numberOfItems)
       .then(timeline => {
         this.setState({ ...this.state, timeline: timeline});
       });

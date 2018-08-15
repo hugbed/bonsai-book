@@ -11,9 +11,9 @@ class TreeListPage extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
       TreeAPI.fetchAll()
-        .then(trees => this.setState({ trees: trees}));
+        .then(trees => this.setState({ trees: trees}))
   }
 
   render() {
