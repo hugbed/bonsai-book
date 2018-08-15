@@ -66,7 +66,13 @@ class TimelineItemPhoto extends Component {
   render() {
     const item = this.props.item;
     return (
-      <TimelineItem>Photo, { dateToString(new Date(item.date)) }</TimelineItem>
+      <TimelineItem>
+        Photo ({ dateToString(new Date(item.date)) })
+        <img
+          alt={item.filepath}
+          style={{width: '100%'}}
+          src={`/trees/tree/photo/file/${item.filepath}`} />
+      </TimelineItem>
     );
   }
 }

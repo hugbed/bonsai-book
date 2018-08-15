@@ -6,6 +6,7 @@ import Select from '../Select';
 import Checkbox from '../Checkbox';
 import { Horizontal } from '../Horizontal';
 import Input from '../Input';
+import { todayString } from '../DateUtils';
 
 import TreeAPI from '../API/Tree';
 
@@ -17,7 +18,7 @@ class AddAcquisitionItem extends Component {
         this.state = {
             acquisition: {
                 note: "",
-                date: "",
+                date: todayString(),
                 type: ""
             },
             acquisitionTypes: []
@@ -28,7 +29,6 @@ class AddAcquisitionItem extends Component {
         const _this = this;
         TreeAPI.fetchAcquisitionTypes()
             .then(types => {
-                console.log(types);
                 _this.setState({ ..._this.state, acquisitionTypes: types });
             });
     }

@@ -34,8 +34,6 @@ class DatePicker extends Component {
 }
 
 const DateContainer = styled.div`
-    margin-top: 10px;
-    margin-bottom: 10px;
     display: inline-block;
 `;
 

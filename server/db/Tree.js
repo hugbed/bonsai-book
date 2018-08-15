@@ -128,17 +128,13 @@ class Tree {
 
 	static async _addName(table, name) {
 		try {
-			console.log('Adding ' + table + ' ' + name);
 			// add it if it does not exist
 			const { id } = await db.fetchFirstQueryRow('INSERT INTO ' + table + ' (id, name) VALUES (DEFAULT, $1) RETURNING id', [name]);
  			return id;
 		} catch (e) {
-			console.log('Already exists ' + table + ' ' + name);
 			// it already exists, fetch its id
 			const res = await this._fetchName(table, name);
-			// console.log(res);
 			const { id } = res;
-			console.log('Done ' + table + ' ' + name);
 			return id;
 		}
 	}	

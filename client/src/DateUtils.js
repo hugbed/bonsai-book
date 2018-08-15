@@ -7,4 +7,8 @@ function dateToString (date) {
     return `${year}-${month}-${day}`;
 }
 
-export { dateToString };
+function todayString() {
+    return dateToString(new Date(Date.now()));
+}
+
+export { dateToString, todayString };

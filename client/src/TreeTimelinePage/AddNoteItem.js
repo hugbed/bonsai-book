@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
 import TextArea from '../TextArea';
-import DatePicker from '../DatePicker';
+// import DatePicker from '../DatePicker';
 
-import Checkbox from '../Checkbox';
+// import Checkbox from '../Checkbox';
 import TreeAPI from '../API/Tree';
 
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
 class AddNoteItem extends Component {
     constructor(props) {
@@ -31,9 +31,10 @@ class AddNoteItem extends Component {
         });
     }
 
-    onSubmit(event) {
-        TreeAPI.addNoteForTree(this.props.tree.id, this.state.note);
+    async onSubmit(event) {
         event.preventDefault();
+        await TreeAPI.addNoteForTree(this.props.tree.id, this.state.note);
+        window.location.reload(false); 
     }
 
     render() {

@@ -57,16 +57,16 @@ router.get('/tree/maintenance/:tree_id', async (req, res) => {
 	res.send(await treeDB.fetchMaintenanceForTree(id));
 });
 
-router.post('/tree/maintenance', async (req, res) => {
+router.post('/tree/maintenance/:tree_id', async (req, res) => {
+	const treeId = req.params["tree_id"];
 	const maintenance = {
-		treeId : req.body.tree_id,
+		treeId : treeId,
 		type : req.body.type,
 		date : req.body.date,
-		comment : req.body.comment,
-	  };
+		comment : req.body.comment
+	};
 	const id = await treeDB.addMaintenance(maintenance);
-	res.send(JSON.stringify({ maintenance_id: id }))
-	res.sendStatus(200);
+	res.send(JSON.stringify({ id: id }))
 });
 
 router.get('/maintenance/types', async (req, res) => {
@@ -106,8 +106,8 @@ router.post('/tree/note', async (req, res) => {
 		date : new Date(Date.now()),
 		comment : req.body.comment
 	};
-	await treeDB.addNoteForTree(note);
-	res.sendStatus(200);
+	const id = await treeDB.addNoteForTree(note);
+	res.send(JSON.stringify({ id: id }));
 });
 
 router.post('/tree/photo', async (req, res) => {
@@ -115,10 +115,10 @@ router.post('/tree/photo', async (req, res) => {
 		treeId : req.body.tree_id,
 		date : req.body.date,
 		filepath : req.body.filepath,
-		comment : req.body.comment,
-	  };
-	await treeDB.addPhotoForTree(photo);
-	res.sendStatus(200);
+		comment : req.body.comment
+	};
+	const id = await treeDB.addPhotoForTree(photo);
+	res.send(JSON.stringify({ id: id }));
 });
 
 router.get('/tree/photo/file/:filename', async (req, res) => {

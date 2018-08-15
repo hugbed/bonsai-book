@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Select from '../Select';
 
 import AddMaintenanceItem from './AddMaintenanceItem';
-import AddAcquisitionItem from './AddAcquisitionItem';
+// import AddAcquisitionItem from './AddAcquisitionItem';
 import AddPhotoItem from './AddPhotoItem';
 import AddNoteItem from './AddNoteItem';
 
@@ -30,10 +30,6 @@ class AddItemMenu extends Component {
             ...this.state,
             option: option
         })
-    }
-
-    onAdd(item) {
-        console.log("Adding: " + item);
     }
 
     render() {

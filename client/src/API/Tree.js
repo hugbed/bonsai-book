@@ -24,12 +24,39 @@ class TreeAPI {
       return await Fetch.get('/trees/acquisition/types');
     }
 
+    static async fetchMaintenanceTypes() {
+      return await Fetch.get('/trees/maintenance/types');
+    }
+
     // todo: should use add tree to add acquisition instead
     static async addAcquisitionForTree(treeId, acquisition) {
       return await Fetch.post(`/trees/tree/acquisition`, {
         tree_id: treeId,
         acquisition: acquisition
       });
+    }
+
+    // todo: should use add tree to add acquisition instead
+    static async addMaintenanceForTree(treeId, maintenance) {
+      return await Fetch.post(`/trees/tree/maintenance/${treeId}`, {
+        ...maintenance
+      });
+    }
+
+    static async addPhotoForTree(treeId, { date, comment }, file) {
+      try {
+        const filename = await Fetch.postFile('/trees/tree/photo/file', file);
+
+        return await Fetch.post("/trees/tree/photo", {
+          tree_id: treeId,
+          date: date,
+          filepath: filename,
+          comment: comment
+        });
+      } catch (e) {
+        console.log("Can't upload file");
+        throw e;
+      }
     }
 }
 
