@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Tree from '../Tree';
 import AddItemMenu from './AddItemMenu';
+import Card from '../Card';
 import { dateToString } from '../DateUtils';
+import { FormLabel, FormRow } from '../Form';
 import styled from 'styled-components';
 
 class TreeTimeline extends Component {
@@ -30,11 +32,13 @@ class TreeTimeline extends Component {
         <div style={{margin: '25px'}}>
           <Tree tree={this.props.tree} editable={false}/>
         </div>
-        <div style={{margin:'25px'}}>
-          <AddItemMenu tree={this.props.tree} />
-        </div>
+        <details>
+            <Summary>Post an event</Summary>
+            <div style={{margin:'25px'}}>
+              <AddItemMenu tree={this.props.tree} />
+            </div>
+          </details>
         <div style={{margin: '25px'}}>
-          Recent Activity
           <div> { this.renderTimeline() } </div>
         </div>
       </div>
@@ -42,11 +46,26 @@ class TreeTimeline extends Component {
   }
 }
 
+const Summary = styled.summary`
+  padding: 7px;
+  margin: 7px;
+  cursor: pointer;
+  outline: none;
+`;
+
 class TimelineItemAcquisition extends Component {
   render() {
     const item = this.props.item;
     return (
-      <TimelineItem>Acquisition ({ dateToString(new Date(item.date)) })</TimelineItem>
+      <TimelineItem>
+        <CardTitle>
+          Acquisition
+        </CardTitle>
+        <Comment> { item.comment } </Comment>
+        <DateFooter>
+          { dateToString(new Date(item.date)) }
+        </DateFooter>
+      </TimelineItem>
     );
   }
 }
@@ -56,7 +75,13 @@ class TimelineItemMaintenance extends Component {
     const item = this.props.item;
     return (
       <TimelineItem>
-        { item.maintenance_type_name } ({ dateToString(new Date(item.date)) })
+        <CardTitle>
+          { item.maintenance_type_name }
+        </CardTitle>
+        <Comment> { item.comment } </Comment>
+        <DateFooter>
+          { dateToString(new Date(item.date)) }
+        </DateFooter>
       </TimelineItem>
     );
   }
@@ -67,11 +92,12 @@ class TimelineItemPhoto extends Component {
     const item = this.props.item;
     return (
       <TimelineItem>
-        Photo ({ dateToString(new Date(item.date)) })
         <img
           alt={item.filepath}
           style={{width: '100%'}}
           src={`/trees/tree/photo/file/${item.filepath}`} />
+        <Comment> { item.comment } </Comment>
+        <DateFooter> { dateToString(new Date(item.date)) } </DateFooter>
       </TimelineItem>
     );
   }
@@ -81,13 +107,34 @@ class TimelineItemNote extends Component {
   render() {
     const item = this.props.item;
     return (
-      <TimelineItem>Note ({ dateToString(new Date(item.date)) }): {item.comment} </TimelineItem>
+      <TimelineItem>
+        <Comment> { item.comment } </Comment>
+        <DateFooter> { dateToString(new Date(item.date)) } </DateFooter>
+      </TimelineItem>
     );
   }
 }
 
-const TimelineItem = styled.div`
-  margin: 25px;
+const CardTitle = FormLabel.extend`
+    padding-bottom: 15px;
+    box-shadow: 0 3px 3px -3px rgba(0,0,0,0.3);
+    padding-left: 10px;
+    width: 100%;
+`;
+
+const Comment = styled.div`
+  margin-top: 10px;
+  padding-left: 10px;
+`;
+
+const DateFooter = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  font-size: 14px;
+`;
+
+const TimelineItem = Card.extend`
+  margin-bottom: 10px;
 `;
 
 export default TreeTimeline;

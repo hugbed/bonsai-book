@@ -74,7 +74,6 @@ class AddPhotoItem extends Component {
                         style={{width: '100%'}}
                         placeholder="Comment..."
                         name="comment"
-                        cols="40"
                         rows="5"
                         onChange={(comment) => this.onCommentChange(comment)}></TextArea>
                 </FormRow>

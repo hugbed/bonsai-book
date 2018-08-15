@@ -23,7 +23,6 @@ class TextArea extends Component {
             <TextAreaContainer
                 style={this.props.style}
                 placeholder={this.props.placeholder}
-                cols={this.props.cols}
                 rows={this.props.rows}
                 value={this.state.value} onChange={(event) => this.handleChange(event)} />
         );
@@ -32,6 +31,11 @@ class TextArea extends Component {
 
 const TextAreaContainer = styled.textarea`
     ${Style}
+    resize: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+         box-sizing: border-box;
+    outline: none;
 `;
 
 

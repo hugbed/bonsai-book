@@ -6,7 +6,8 @@ import AddMaintenanceItem from './AddMaintenanceItem';
 // import AddAcquisitionItem from './AddAcquisitionItem';
 import AddPhotoItem from './AddPhotoItem';
 import AddNoteItem from './AddNoteItem';
-
+import Card from '../Card';
+import { FormLabel, FormRow } from '../Form';
 import styled from 'styled-components';
 
 const options = [ "note", "maintenance", "photo" ];
@@ -34,26 +35,45 @@ class AddItemMenu extends Component {
 
     render() {
         return (
-            <div>
-                <label>
-                    <InputLabel>Post an event</InputLabel>
-                    <Select values={options} onChange={(option) => this.onOptionChange(option)} />
-                </label>
+            <Card>
+                <EventTypeContainer>
+                    <label style={{margin: '25px'}}>
+                        <FormLabel>Event type: </FormLabel>
+                        <Select values={options} onChange={(option) => this.onOptionChange(option)} />
+                    </label>
+                </EventTypeContainer>
                 <OptionComponentContainer>
                     { optionComponents[this.state.option](this.props.tree) }
                 </OptionComponentContainer>
-            </div>
+            </Card>
         );
     }
 }
 
-const InputLabel = styled.div`
-    display: inline-block;
-    margin-right: 10px;
-`
+// const InputLabel = styled.div`
+//     display: inline-block;
+//     margin-right: 10px;
+// `
+
+const EventTypeContainer = FormRow.extend`
+    padding-bottom: 15px;
+    box-shadow: 0 3px 3px -3px rgba(0,0,0,0.3);
+`;
 
 const OptionComponentContainer = styled.div`
-    margin: 25px;
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-top: 25px;
+`;
+
+const stuff = styled.div`
+    box-shadow: 0 3px 7px -3px rgba(0, 0, 0, 0.3);
+    margin: 6px;
+    border-radius: 4px;
+    background-color: white;
+    padding-top: 25px;
+    padding-bottom: 1px;
+    padding-right: 20px;
 `;
 
 export default AddItemMenu;
