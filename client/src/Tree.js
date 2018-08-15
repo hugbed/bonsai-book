@@ -32,7 +32,7 @@ class Tree extends Component {
             <div>
               <Field name="Genus" value={tree.genus}></Field>
               <Field name="Species" value={tree.species}></Field>
-              {/* <Field name="Family" value={tree.family}></Field> */}
+              <Field style={{display: 'none'}} name="Family" value={tree.family}></Field>
               <Field name="Acquired on" value={dateStr}></Field>
               <Field name="At (approximately)" value={tree.acquisition_age}> year(s) old</Field>
               <Field name="From" value={tree.acquisition_type}></Field>
@@ -49,7 +49,7 @@ class Tree extends Component {
   class Field extends Component {
     render() {
       return (
-        <FieldContainer>
+        <FieldContainer style={this.props.style}>
           <Label> { this.props.name } </Label> : { this.props.value } { this.props.children }
         </FieldContainer>
       );

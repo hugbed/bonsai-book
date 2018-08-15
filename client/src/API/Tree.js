@@ -9,6 +9,18 @@ class TreeAPI {
       return await Fetch.get(`/trees/tree/${id}`);
     }
 
+    static async fetchFamilies(id) {
+      return await Fetch.get(`/trees/families`);
+    }
+
+    static async fetchGenus(id) {
+      return await Fetch.get(`/trees/genus`);
+    }
+
+    static async fetchSpecies(id) {
+      return await Fetch.get(`/trees/species`);
+    }
+
     static async fetchTimelineForTree(treeId, offset, numberOfItems) {
       return await Fetch.get(`/trees/tree/timeline/${treeId}?offset=${offset}&numberOfItems=${numberOfItems}`);
     }
@@ -29,10 +41,16 @@ class TreeAPI {
     }
 
     // todo: should use add tree to add acquisition instead
-    static async addAcquisitionForTree(treeId, acquisition) {
-      return await Fetch.post(`/trees/tree/acquisition`, {
-        tree_id: treeId,
-        acquisition: acquisition
+    static async addTree(tree) {
+      return await Fetch.post(`/trees/tree`, {
+        family: tree.family,
+        genus: tree.genus,
+        species: tree.species,
+        acquisition_date: tree.acquisition_date,
+        acquisition_age: tree.acquisition_age,
+        acquisition_location: tree.acquisition_location,
+        acquisition_type: tree.acquisition_type,
+        acquisition_comment: tree.acquisition_comment
       });
     }
 

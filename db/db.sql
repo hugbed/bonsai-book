@@ -93,7 +93,7 @@ CREATE TABLE note (
 );
 
 CREATE VIEW maintenance_view AS
-	SELECT 
+	SELECT
 		maintenance.id,
 		maintenance.tree_id,
 		maintenance_type.id AS maintenance_type_id,
@@ -102,6 +102,18 @@ CREATE VIEW maintenance_view AS
 		maintenance.comment
 	FROM maintenance
 	INNER JOIN maintenance_type ON maintenance.maintenance_type_id = maintenance_type.id;
+
+CREATE VIEW acquisition_view AS
+	SELECT
+		acquisition.id,
+		acquisition.tree_id,
+		acquisition_type.id AS acquisition_type_id,
+		acquisition_type.name AS type_name,
+		acquisition.location,
+		acquisition.date,
+		acquisition.comment
+	FROM acquisition
+	INNER JOIN acquisition_type ON acquisition.acquisition_type_id = acquisition_type.id;
 
 CREATE VIEW tree_view AS
 	SELECT
@@ -133,7 +145,7 @@ CREATE TABLE timeline_table_index (
 	UNIQUE(table_name)
 );
 
-INSERT INTO timeline_table_index (id, item_type_name, table_name) VALUES (0, 'acquisition', 'acquisition');
+INSERT INTO timeline_table_index (id, item_type_name, table_name) VALUES (0, 'acquisition', 'acquisition_view');
 INSERT INTO timeline_table_index (id, item_type_name, table_name) VALUES (1, 'maintenance', 'maintenance_view');
 INSERT INTO timeline_table_index (id, item_type_name, table_name) VALUES (2, 'photo', 'photo');
 INSERT INTO timeline_table_index (id, item_type_name, table_name) VALUES (3, 'note', 'note');

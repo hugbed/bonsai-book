@@ -30,14 +30,17 @@ class TreeTimeline extends Component {
     return (
       <div>
         <div style={{margin: '25px'}}>
-          <Tree tree={this.props.tree} editable={false}/>
+          <Tree tree={this.props.tree} editable={false}></Tree>
+          <Comment style={{paddingTop: '10px', margin: '10px'}}>
+            {this.props.tree.acquisition_comment}
+          </Comment>
         </div>
         <details>
             <Summary>Post an event</Summary>
             <div style={{margin:'25px'}}>
               <AddItemMenu tree={this.props.tree} />
             </div>
-          </details>
+        </details>
         <div style={{margin: '25px'}}>
           <div> { this.renderTimeline() } </div>
         </div>
@@ -59,8 +62,9 @@ class TimelineItemAcquisition extends Component {
     return (
       <TimelineItem>
         <CardTitle>
-          Acquisition
+          Acquisition ({item.type_name})
         </CardTitle>
+        <Comment>  At {item.location}. </Comment>
         <Comment> { item.comment } </Comment>
         <DateFooter>
           { dateToAgo(new Date(item.date)) } ({ dateToString(new Date(item.date)) })

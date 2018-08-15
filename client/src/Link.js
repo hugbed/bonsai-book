@@ -1,5 +1,6 @@
 import React from 'react';
 import history from './history';
+import styled from 'styled-components';
 
 class Link extends React.Component {
   transition = event => {
@@ -12,9 +13,13 @@ class Link extends React.Component {
 
   render() {
     return (
-      <a href={this.props.to} onClick={this.transition}>{this.props.children}</a>
+      <A href={this.props.to} onClick={this.transition}>{this.props.children}</A>
     )
   }
 }
+
+const A = styled.a`
+  text-decoration:none;
+`;
 
 export default Link;
