@@ -16,7 +16,7 @@ class AddPhotoItem extends Component {
         this.state = {
             file: {},
             date: todayString(),
-            comment: "comment"
+            comment: ""
         };
     }
 
