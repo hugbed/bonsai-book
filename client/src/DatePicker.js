@@ -9,7 +9,7 @@ class DatePicker extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            date: this.todayDate()
+            date: this.todayDate() + "T00:00"
         };
     }
 
@@ -26,7 +26,7 @@ class DatePicker extends Component {
         return (
             <DateContainer>
                 <InputDate
-                    type="date"
+                    type="datetime-local"
                     onChange={(event) => this.onChange(event)}
                     value={this.state.date} />
             </DateContainer>

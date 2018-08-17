@@ -51,8 +51,7 @@ class Tree extends Component {
       let img = <img/>;
       if (this.state.photo !== undefined && this.state.photo.filepath !== undefined) {
         img = <img
-                style={{width: '200px'}}
-                width="200px"
+                style={{height: '100%', width: 'auto'}}
                 alt={this.state.photo.filepath}
                 src={`/trees/tree/photo/file/${this.state.photo.filepath}`}/>;
       }
