@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import Tree from '../Tree';
 import AddItemMenu from './AddItemMenu';
-import Card from '../Card';
 import { dateToString, dateToAgo } from '../DateUtils';
-import { FormLabel, FormRow } from '../Form';
+import { FormLabel } from '../Form';
+import TimelineItemPhoto from './TimelineItemPhoto';
+import Comment from './Comment';
+import DateFooter from './DateFooter';
+import TimelineItem from './TimelineItem';
+
 import styled from 'styled-components';
 
 class TreeTimeline extends Component {
@@ -91,25 +95,6 @@ class TimelineItemMaintenance extends Component {
   }
 }
 
-class TimelineItemPhoto extends Component {
-  render() {
-    const item = this.props.item;
-    const filepath = item.filepath !== undefined ? item.filepath : "";
-    return (
-      <TimelineItem>
-        <img
-          alt={item.filepath}
-          style={{width: '100%'}}
-          src={`/trees/tree/photo/file/${filepath}`} />
-        <Comment> { item.comment } </Comment>
-        <DateFooter>
-          { dateToAgo(new Date(item.date)) } ({ dateToString(new Date(item.date)) })
-        </DateFooter>
-      </TimelineItem>
-    );
-  }
-}
-
 class TimelineItemNote extends Component {
   render() {
     const item = this.props.item;
@@ -127,22 +112,6 @@ const CardTitle = FormLabel.extend`
     box-shadow: 0 3px 3px -3px rgba(0,0,0,0.3);
     padding-left: 10px;
     width: 100%;
-`;
-
-const Comment = styled.div`
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding-left: 10px;
-`;
-
-const DateFooter = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  font-size: 14px;
-`;
-
-const TimelineItem = Card.extend`
-  margin-bottom: 10px;
 `;
 
 export default TreeTimeline;

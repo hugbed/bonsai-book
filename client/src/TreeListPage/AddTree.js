@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import TextArea from '../TextArea';
 import DatePicker from '../DatePicker';
 import Select from '../Select';
-import Checkbox from '../Checkbox';
 import { Horizontal } from '../Horizontal';
 import Input from '../Input';
 import { todayString } from '../DateUtils';
@@ -19,7 +18,7 @@ class AddTree extends Component {
         this.state = {
             acquisition: {
                 note: "",
-                date: todayString(),
+                date: todayString() + 'T00:00',
                 type: "",
                 age: 0,
                 location: ""
@@ -201,7 +200,7 @@ class AddTree extends Component {
                     <Horizontal>
                         <label>
                             <FormLabel>Date:</FormLabel>
-                            <DatePicker onChange={((date) => this.onDateChange(date))} />
+                            <DatePicker date={this.state.acquisition.date} onChange={((date) => this.onDateChange(date))} />
                         </label>
                     </Horizontal>
                 </FormRow>

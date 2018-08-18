@@ -125,7 +125,19 @@ router.post('/tree/photo', async (req, res) => {
 	console.log("Adding photo: ");
 	console.log(photo);
 	const id = await treeDB.addPhotoForTree(photo);
-	console.log(id);
+	res.send(JSON.stringify({ id: id }));
+});
+
+router.put('/tree/photo/:photo_id', async (req, res) => {
+	const photoId = req.params["photo_id"];
+	const photo = {
+		treeId : req.body.tree_id,
+		date : req.body.date,
+		filepath : req.body.filepath,
+		comment : req.body.comment
+	};
+	console.log("Updating photo: " + photoId);
+	const id = await treeDB.updatePhoto(photoId, photo);
 	res.send(JSON.stringify({ id: id }));
 });
 

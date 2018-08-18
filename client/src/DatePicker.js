@@ -3,23 +3,9 @@ import styled from 'styled-components';
 
 import Style from './Style';
 
-import { dateToString } from './DateUtils';
-
 class DatePicker extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            date: this.todayDate() + "T00:00"
-        };
-    }
-
     onChange(event) {
-        this.setState({date: event.target.value});
         this.props.onChange(event.target.value);
-    }
-
-    todayDate() {
-        return dateToString(new Date(Date.now()));
     }
     
     render() {
@@ -28,7 +14,7 @@ class DatePicker extends Component {
                 <InputDate
                     type="datetime-local"
                     onChange={(event) => this.onChange(event)}
-                    value={this.state.date} />
+                    value={this.props.date} />
             </DateContainer>
         );
     }

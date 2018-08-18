@@ -1,8 +1,4 @@
 import React, { Component } from 'react';
-import Link from '../Link';
-import Label from '../Label';
-import { Horizontal } from '../Horizontal';
-import { PlusButton } from '../IconButton';
 import AddTree from './AddTree';
 import Tree from '../Tree';
 import styled from 'styled-components';

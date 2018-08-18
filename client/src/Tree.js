@@ -28,7 +28,7 @@ class Tree extends Component {
         );
     }
 
-    componentDidMount(prevProps) {
+    componentDidMount() {
       if (this.props.tree !== undefined) {
         this.fetchLastPhotoOfTree();
       }

@@ -80,6 +80,12 @@ class TreeAPI {
         throw e;
       }
     }
+
+    static async updatePhoto(photo) {
+        return await Fetch.put(`/trees/tree/photo/${photo.id}`, {
+          ...photo
+        });
+    }
 }
 
 export default TreeAPI;

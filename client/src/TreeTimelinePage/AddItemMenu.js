@@ -66,14 +66,4 @@ const OptionComponentContainer = styled.div`
     margin-top: 25px;
 `;
 
-const stuff = styled.div`
-    box-shadow: 0 3px 7px -3px rgba(0, 0, 0, 0.3);
-    margin: 6px;
-    border-radius: 4px;
-    background-color: white;
-    padding-top: 25px;
-    padding-bottom: 1px;
-    padding-right: 20px;
-`;
-
 export default AddItemMenu;

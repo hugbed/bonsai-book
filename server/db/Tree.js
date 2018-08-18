@@ -117,6 +117,15 @@ class Tree {
 		return id;
 	}
 
+	static async updatePhoto(photoId, photo) {
+		let queryStr = 'UPDATE photo SET tree_id = $1, date = $2, filepath = $3, comment = $4 ';
+		queryStr    += 'WHERE id = $5 RETURNING id';
+		const { id } = await db.fetchFirstQueryRow(
+			queryStr, [photo.treeId, photo.date, photo.filepath, photo.comment, photoId]
+		);
+		return id;
+	}
+
 	static async addNoteForTree(photo) {
 		let queryStr = 'INSERT INTO note (id, tree_id, date, comment) ';
 		queryStr    += 'VALUES (DEFAULT, $1, $2, $3) RETURNING id';

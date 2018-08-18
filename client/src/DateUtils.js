@@ -1,10 +1,12 @@
+function zeroPad(value) {
+    return (value < 10) ? '0' + value : value;
+}
+
 function dateToString (date) {
     const year = date.getFullYear();
     let month = date.getMonth() + 1;
     let day = date.getDate();
-    if (month < 10) month = '0' + month;
-    if (day < 10) day = '0' + day;
-    return `${year}-${month}-${day}`;
+    return `${year}-${zeroPad(month)}-${zeroPad(day)}`;
 }
 
 function todayString() {
@@ -44,4 +46,11 @@ function dateToAgo(date) {
     return agoStr;
 }
 
-export { dateToString, todayString, dateToAgo };
+function dateTimeToLocal(dateStr) {
+    const date = new Date(dateStr);
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    return dateToString(date) + `T${zeroPad(hours)}:${zeroPad(minutes)}` ;
+}
+
+export { dateToString, todayString, dateToAgo, dateTimeToLocal };

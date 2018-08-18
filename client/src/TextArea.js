@@ -5,16 +5,8 @@ import Style from './Style';
 import styled from 'styled-components';
 
 class TextArea extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: ''
-        };
-    }
-
     handleChange(event) {
         const value = event.target.value;
-        this.setState({value: value});
         this.props.onChange(value);
     }
 
@@ -24,7 +16,7 @@ class TextArea extends Component {
                 style={this.props.style}
                 placeholder={this.props.placeholder}
                 rows={this.props.rows}
-                value={this.state.value} onChange={(event) => this.handleChange(event)} />
+                value={this.props.value} onChange={(event) => this.handleChange(event)} />
         );
     }
 }

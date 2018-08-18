@@ -15,7 +15,7 @@ class AddPhotoItem extends Component {
         super(props);
         this.state = {
             file: {},
-            date: todayString(),
+            date: todayString() + 'T04:00',
             comment: ""
         };
     }
@@ -57,7 +57,7 @@ class AddPhotoItem extends Component {
                     <Horizontal>
                         <label>
                             <FormLabel>Date:</FormLabel>
-                            <DatePicker onChange={((date) => this.onDateChange(date))} />
+                            <DatePicker date={this.state.date} onChange={((date) => this.onDateChange(date))} />
                         </label>
                     </Horizontal>
                 </FormRow>
@@ -73,6 +73,7 @@ class AddPhotoItem extends Component {
                     <TextArea
                         style={{width: '100%'}}
                         placeholder="Comment..."
+                        value={this.state.comment}
                         name="comment"
                         rows="5"
                         onChange={(comment) => this.onCommentChange(comment)}></TextArea>

@@ -20,6 +20,19 @@ class Fetch {
         .then(jsonData => jsonData);
     }
 
+    static async put(url, body) {
+      return await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      }).then(response => response.json())
+        .catch(err => console.log(err))
+        .then(jsonData => jsonData);
+    }
+
     static async postFile(url, file) {
       let data = new FormData();
       data.append("file", file);
