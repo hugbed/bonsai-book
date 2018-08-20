@@ -46,16 +46,7 @@ class TreeAPI {
 
     // todo: should use add tree to add acquisition instead
     static async addTree(tree) {
-      return await Fetch.post(`/trees/tree`, {
-        family: tree.family,
-        genus: tree.genus,
-        species: tree.species,
-        acquisition_date: tree.acquisition_date,
-        acquisition_age: tree.acquisition_age,
-        acquisition_location: tree.acquisition_location,
-        acquisition_type: tree.acquisition_type,
-        acquisition_comment: tree.acquisition_comment
-      });
+      return await Fetch.post(`/trees/tree`, tree);
     }
 
     // todo: should use add tree to add acquisition instead

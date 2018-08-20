@@ -29,6 +29,7 @@ class Select extends Component {
 
 const SelectContainer = styled.select`
     ${Style}
+    margin-right: 10px;
 `;
 
 export default Select;

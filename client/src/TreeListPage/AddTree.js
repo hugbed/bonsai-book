@@ -12,6 +12,22 @@ import TreeAPI from '../API/Tree';
 
 import styled from 'styled-components';
 
+const zones = [
+    "1a", "1b",
+    "2a", "2b",
+    "3a", "3b",
+    "4a", "4b",
+    "5a", "5b",
+    "6a", "6b",
+    "7a", "7b",
+    "8a", "8b",
+    "9a", "9b",
+    "10a", "10b",
+    "11a", "11b",
+    "12a", "12b",
+    "13a", "13b"
+];
+
 class AddTree extends Component {
     constructor(props) {
         super(props);
@@ -30,7 +46,10 @@ class AddTree extends Component {
             type: {
                 family: "",
                 genus: "",
-                species: ""
+                species: "",
+                zone_min: zones[0],
+                zone_max: zones[0],
+                zone_preferred: zones[0]
             }
         };
     }
@@ -48,26 +67,26 @@ class AddTree extends Component {
             .then(families => {
                 _this.setState({ ..._this.state, families: families });
                 if (families.length > 0) {
-                    _this.onTreeTypeFieldSelected('family', families[0].name);
+                    _this.onTypeFieldChange('family', families[0].name);
                 }
             });
         TreeAPI.fetchGenus()
             .then(genus => {
                 _this.setState({ ..._this.state, genus: genus });
                 if (genus.length > 0) {
-                    _this.onTreeTypeFieldSelected('genus', genus[0].name);
+                    _this.onTypeFieldChange('genus', genus[0].name);
                 }
             });
         TreeAPI.fetchSpecies()
             .then(species => {
                 _this.setState({ ..._this.state, species: species });
                 if (species.length > 0) {
-                    _this.onTreeTypeFieldSelected('species', species[0].name);
+                    _this.onTypeFieldChange('species', species[0].name);
                 }
             });
     }
 
-    onTreeTypeFieldSelected(fieldName, value) {
+    onTypeFieldChange(fieldName, value) {
         this.setState({
             ...this.state,
             type: {
@@ -80,72 +99,52 @@ class AddTree extends Component {
     onFamilyTyped(family) {
         // override select box
         if ((family in this.state.families) === false) {
-            this.onTreeTypeFieldSelected('family', family);
+            this.onTypeFieldChange('family', family);
         }
     }
 
     onGenusTyped(genus) {
         // override select box
         if ((genus in this.state.genus) === false) {
-            this.onTreeTypeFieldSelected('genus', genus);
+            this.onTypeFieldChange('genus', genus);
         }
     }
 
     onSpeciesTyped(species) {
         // override select box
         if ((species in this.state.species) === false) {
-            this.onTreeTypeFieldSelected('species', species);
+            this.onTypeFieldChange('species', species);
         }
     }
 
-    onDateChange(date) {
+    onAcquisitionFieldChanged(fieldName, value) {
         this.setState({
             ...this.state,
             acquisition: {
                 ...this.state.acquisition,
-                date: date
+                [fieldName]: value
             }
-        });
+        });        
+    }
+
+    onDateChange(date) {
+        this.onAcquisitionFieldChanged("date", date);
     }
 
     onNoteChange(note) {
-        this.setState({
-            ...this.state,
-            acquisition: {
-                ...this.state.acquisition,
-                note: note
-            }
-        });
+        this.onAcquisitionFieldChanged("note", note);
     }
 
     onAgeChange(age) {
-        this.setState({
-            ...this.state,
-            acquisition: {
-                ...this.state.acquisition,
-                age: age
-            }
-        });
+        this.onAcquisitionFieldChanged("age", age);
     }
 
     onLocationChange(location) {
-        this.setState({
-            ...this.state,
-            acquisition: {
-                ...this.state.acquisition,
-                location: location
-            }
-        });
+        this.onAcquisitionFieldChanged("location", location);
     }    
 
     onAcquisitionTypeChange(type) {
-        this.setState({
-            ...this.state,
-            acquisition: {
-                ...this.state.acquisition,
-                type: type
-            }
-        });
+        this.onAcquisitionFieldChanged("type", type);
     }
 
     async onSubmit(event) {
@@ -154,6 +153,9 @@ class AddTree extends Component {
             family: this.state.type.family,
             genus: this.state.type.genus,
             species: this.state.type.species,
+            zone_min: this.state.type.zone_min,
+            zone_max: this.state.type.zone_max,
+            zone_preferred: this.state.type.zone_preferred,
             acquisition_date: this.state.acquisition.date,
             acquisition_age: this.state.acquisition.age,
             acquisition_location: this.state.acquisition.location,
@@ -177,7 +179,7 @@ class AddTree extends Component {
                         <label><FormLabel>Family:</FormLabel>
                             <Input type="text" value={this.state.type.family} onChange={(e) => this.onFamilyTyped(e.target.value)}/>
                         </label>
-                        <Select values={families} onChange={(family) => this.onTreeTypeFieldSelected('family', family)} />
+                        <Select values={families} onChange={(family) => this.onTypeFieldChange('family', family)} />
                     </Horizontal>
                 </FormRow>
                 <FormRow>
@@ -185,7 +187,7 @@ class AddTree extends Component {
                         <label><FormLabel>Genus:</FormLabel>
                             <Input type="text" value={this.state.type.genus} onChange={(e) => this.onGenusTyped(e.target.value)}/>
                         </label>
-                        <Select values={genus} onChange={(genus) => this.onTreeTypeFieldSelected('genus', genus)} />
+                        <Select values={genus} onChange={(genus) => this.onTypeFieldChange('genus', genus)} />
                     </Horizontal>
                 </FormRow>
                 <FormRow>
@@ -193,9 +195,25 @@ class AddTree extends Component {
                         <label><FormLabel>Species:</FormLabel>
                             <Input type="text" value={this.state.type.species} onChange={(e) => this.onSpeciesTyped(e.target.value)}/>
                         </label>
-                        <Select values={species} onChange={(species) => this.onTreeTypeFieldSelected('species', species)} />
+                        <Select values={species} onChange={(species) => this.onTypeFieldChange('species', species)} />
                     </Horizontal>
-                </FormRow>                                            
+                </FormRow>
+                <FormRow>
+                    <Horizontal>
+                        <label>
+                            <FormLabel>Zone:</FormLabel>
+                            <label>
+                                <FormSubLabel>min:</FormSubLabel><Select values={zones} onChange={(zone) => this.onTypeFieldChange('zone_min', zone)} />
+                            </label>
+                            <label>
+                                <FormSubLabel>max:</FormSubLabel><Select values={zones} onChange={(zone) => this.onTypeFieldChange('zone_max', zone)} />
+                            </label>
+                            <label>
+                                <FormSubLabel>preferred:</FormSubLabel><Select values={zones} onChange={(zone) => this.onTypeFieldChange('zone_preferred', zone)} />
+                            </label>
+                        </label>
+                    </Horizontal>
+                </FormRow>
                 <FormRow>
                     <Horizontal>
                         <label>
@@ -247,6 +265,10 @@ class AddTree extends Component {
 const FormLabel = styled.div`
     display: inline-block
     margin-right: 10px
+`;
+
+const FormSubLabel = FormLabel.extend`
+    font-size: 13px;
 `;
 
 const FormRow = styled.div`

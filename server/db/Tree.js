@@ -185,6 +185,19 @@ class Tree {
 		return id;
 	}
 
+	static async upsertTreeTypeHardiness({ tree_type_id,  zone_min, zone_max, zone_preferred }) {
+		const queryStr = `
+			INSERT INTO tree_type_hardiness (tree_type_id, zone_min, zone_max, zone_preferred)
+			VALUES ($1, $2, $3, $4)
+			ON CONFLICT (tree_type_id) 
+			DO
+			UPDATE
+				SET zone_min = EXCLUDED.zone_min,
+					zone_max = EXCLUDED.zone_max,
+					zone_preferred = EXCLUDED.zone_preferred`
+		await db.query(queryStr, [tree_type_id, zone_min, zone_max, zone_preferred]);
+	}
+
 	static async addTree(tree) {
 		// need transaction here, commit only if everything can be added
 		const client = await db.connect();
@@ -192,12 +205,22 @@ class Tree {
 		try {
 			await db.begin(client);
 
+			// tree type
 			const familyId = await this.addFamily(tree.family);
 			const genusId = await this.addGenus(tree.genus);
 			const speciesId = await this.addSpecies(tree.species);
 
 			const treeTypeId = await this.addType(familyId, genusId, speciesId);
 
+			// hardiness
+			await this.upsertTreeTypeHardiness({
+				tree_type_id: treeTypeId,
+				zone_min: tree.zoneMin,
+				zone_max: tree.zoneMax,
+				zone_preferred: tree.zonePreferred
+			});
+
+			// tree
 			let queryStr = 'INSERT INTO tree (id, tree_type_id) ';
 			queryStr    += 'VALUES (DEFAULT, $1) RETURNING id';
 			const { id } = await db.fetchFirstQueryRow(
@@ -205,6 +228,7 @@ class Tree {
 				[ treeTypeId ]
 			);
 
+			// acquisition
 			const acquisition = {
 				treeId: id,
 				type: tree.acquisitionType,
