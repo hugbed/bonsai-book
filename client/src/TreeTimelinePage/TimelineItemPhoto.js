@@ -10,6 +10,8 @@ import Comment from './Comment';
 import DateFooter from './DateFooter';
 import { dateToString, dateToAgo, dateTimeToLocal } from '../DateUtils';
 import TimelineItem from './TimelineItem';
+import styled from 'styled-components';
+import { EditButton } from '../IconButton';
 
 import TreeAPI from '../API/Tree';
 
@@ -63,14 +65,22 @@ class TimelineItemPhoto extends Component {
             filepath: this.props.item.filepath
         }
         TreeAPI.updatePhoto(photo);
+        this.onToggleEdit();
+    }
+
+    onToggleEdit() {
+        this.setState({
+            ...this.state,
+            update: !this.state.update
+        });
     }
 
     renderRead(item) {
         return (
             <div>
-                <Comment> { item.comment } </Comment>
+                <Comment> { this.state.comment } </Comment>
                 <DateFooter>
-                { dateToAgo(new Date(item.date)) } ({ dateToString(new Date(item.date)) })
+                { dateToAgo(new Date(this.state.date)) } ({ dateToString(new Date(this.state.date)) })
                 </DateFooter>
             </div>
         );
@@ -108,6 +118,9 @@ class TimelineItemPhoto extends Component {
       const filepath = item.filepath !== undefined ? item.filepath : "";
       return (
         <TimelineItem>
+          <HorizontalEnd>
+              <EditButtonSmall onClick={() => this.onToggleEdit()}> ... </EditButtonSmall>
+          </HorizontalEnd>
           <img
             alt={item.filepath}
             style={{width: '100%'}}
@@ -117,5 +130,14 @@ class TimelineItemPhoto extends Component {
       );
     }
   }
+
+  const HorizontalEnd = Horizontal.extend`
+    display: flex;
+    justify-content: flex-end;
+  `;
+
+  const EditButtonSmall = styled.button`
+    margin-bottom: 10px;
+  `;
 
   export default TimelineItemPhoto;
