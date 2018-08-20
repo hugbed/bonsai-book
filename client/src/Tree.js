@@ -8,6 +8,9 @@ import { dateToString } from './DateUtils';
 import styled from 'styled-components';
 import TreeAPI from './API/Tree';
 
+// todo: this should be a global setting
+const USER_LOCATION_ZONE = 5;
+
 class Tree extends Component {
     constructor(props) {
       super(props);
@@ -58,14 +61,32 @@ class Tree extends Component {
       return img;
     }
 
+    renderHardiness() {
+      const zone = parseInt(this.props.tree.tree_type_zone); // e.g. 6 from '6a'
+
+      const indoors = zone > 7;
+
+      // deltaZone < 0 means your zone is too cold for this tree
+      const deltaZone = USER_LOCATION_ZONE - zone;
+      const protection = indoors === false && deltaZone <= 0; // protect accordingly
+
+      let hardinessStr = indoors ? "Indoors" : "Outdoors";
+      if (protection === true) {
+        hardinessStr += " + protection";
+      }
+      hardinessStr += ` (zone ${zone})`;
+      return hardinessStr;
+    }
+
     render() {
       const tree = this.props.tree;
       const dateStr = dateToString(new Date(tree.acquisition_date));
 
+
       return (
         <Card>
           { this.renderEditBar() }
-          <HorizontalSpaced style={{height: '175px'}}>
+          <HorizontalSpaced style={{height: '205px'}}>
             <div>
               <Field name="Genus" value={tree.genus}></Field>
               <Field name="Species" value={tree.species}></Field>
@@ -74,6 +95,7 @@ class Tree extends Component {
               <Field name="At (approximately)" value={tree.acquisition_age}> year(s) old</Field>
               <Field name="From" value={tree.acquisition_type}></Field>
               <Field name="Location" value={tree.acquisition_location}></Field>
+              <Field name="Winter Hardiness" value={this.renderHardiness()}></Field>
               {/* <Field name="" value={comment}></Field> */}
             </div>
             { this.renderImg() }
